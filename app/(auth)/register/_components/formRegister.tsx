@@ -1,9 +1,13 @@
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/app/_components/ui/form";
+"use client";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { formRegisterValidation, FormRegisterValidationType } from "@/app/_validations/formRegisterValidantion";
 import { useForm } from "react-hook-form";
 import {zodResolver} from '@hookform/resolvers/zod';
 import { Button } from "@/app/_components/ui/button";
+import { useEffect } from "react";
+import { cepApi } from "@/app/_lib/cepApi";
+import SelectState from "./selectState";
 const FormRegister = () => {
     const form = useForm<FormRegisterValidationType>({
         resolver: zodResolver(formRegisterValidation),
@@ -18,13 +22,25 @@ const FormRegister = () => {
             dateOfBirth: "",
         }
     })
+    const {getValues,setValue} = form
+    useEffect(() => {
+        async function fetchData() {
+            const data = await cepApi(getValues('zipCode'))
+            setValue('state',data.state)
+            setValue('address',data.street)
+        }
+        fetchData()
+    }, [getValues('zipCode')])
+    const handleSelect = (value: string) => {
+        setValue('state',value)
+    }
     const onSubmit = (data: FormRegisterValidationType) => {
         console.log(data);
     }
     return(
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex items-center">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <div className="flex items-center gap-4">
             <FormField
                 control={form.control}
                 name="firstName"
@@ -65,7 +81,7 @@ const FormRegister = () => {
                 </FormItem>
                 )}
             />
-            <div>
+            <div className='flex items-center gap-4'>
                 <FormField
                     control={form.control}
                     name="state"
@@ -73,7 +89,7 @@ const FormRegister = () => {
                     <FormItem>
                         <FormLabel>State</FormLabel>
                         <FormControl>
-                        <Input placeholder="Ex:CA" {...field} />
+                            <SelectState state={field.value} handleSelect={handleSelect}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
