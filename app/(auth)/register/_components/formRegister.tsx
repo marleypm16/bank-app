@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/app/_components/ui/po
 import { Calendar } from "@/app/_components/ui/calendar";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import { redirect } from "next/navigation";
+import {signIn} from 'next-auth/react'
 const FormRegister = () => {
     const [loading, setLoading] = useState(false)
     const form = useForm<FormRegisterValidationType>({
