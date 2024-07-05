@@ -10,7 +10,9 @@ export const formRegisterValidation = z.object({
     address: z.string().min(1, "Address is required"),
     state: z.string().min(1, "State is required"),
     zipCode: z.string().min(1, "Zip code is required"),
-    dateOfBirth: z.string().min(1, "Date of birth is required"),
+    dateOfBirth: z.coerce.date({
+        required_error: "Date of birth is required",
+    }),
 });
 
 export type FormRegisterValidationType = z.infer<typeof formRegisterValidation>;
