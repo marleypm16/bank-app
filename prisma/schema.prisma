@@ -19,6 +19,7 @@ model User{
   lastName String
   email String @unique
   password String
+  address String
   zipCode String
   state String
   dateOfBirth DateTime
