@@ -47,7 +47,7 @@ const FormRegister = () => {
         await createUser(data)
         setLoading(false)
         form.reset()
-        redirect("/login")
+        signIn()
     }
     return(
         <Form {...form}>
